@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Rmbg</title>
+        <style>
+            body {
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            .drop-area {
+                border: 2px dashed;
+                height: 60vh;
+                width: 80vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .drop-area.dragover {
+                background-color: #f0f0f0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="dropArea" class="drop-area">
+            <h1>Rmbg</h1>
+            <form id="uploadForm" method="POST" action="/" enctype="multipart/form-data">
+                <input id="imgInput" type="file" name="file" accept="image/*" onchange="this.form.submit()"/>
+            </form>
+        </div>
+
+        <script>
+            let dropArea = document.getElementById('dropArea');
+            let imgInput = document.getElementById('imgInput');
+            let uploadForm = document.getElementById('uploadForm');
+
+            dropArea.addEventListener('dragover', function(e) {
+                e.preventDefault(); // don't open new tab
+                dropArea.classList.add('dragover');
+            });
+
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.classList.remove('dragover');
+            });
+
+            dropArea.addEventListener('drop', function(e) {
+                e.preventDefault(); // don't open new tab
+                e.stopPropagation();
+
+                dropArea.classList.remove('dragover');
+                
+                imgInput.files = e.dataTransfer.files;
+                uploadForm.submit();
+            });
+
+            uploadForm.addEventListener('change', () => {
+                if (imgInput.files.length > 0) {
+                    uploadForm.submit();
+                }
+            });
+        </script>
+    </body>
+</html>
